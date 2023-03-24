@@ -1,0 +1,92 @@
+---
+title: "SQMB 2022/23 – Summative Assessment 2"
+author: "PUT YOUR EXAM NUMBER HERE"
+date: "`r Sys.Date()`"
+output: 
+  pdf_document: 
+    number_sections: yes
+    latex_engine: xelatex
+    keep_tex: yes
+    toc: true
+mainfont: Arial
+---
+\newpage
+
+```{r setup, include=FALSE}
+# PLEASE DON'T CHANGE THESE SETTINGS
+knitr::opts_chunk$set(echo = FALSE)  # This line hides all code in the output
+knitr::opts_knit$set(root.dir = here::here())
+
+library(tidyverse)
+library(brms)
+library(broom.mixed)
+library(posterior)
+library(knitr)
+```
+
+
+# Set-up instructions
+
+- **Before changing anything in this document, render it to PDF** to make sure that everything is rendered as it should be.
+  - If you receive the error `Error in library (knitr) : there is no package called 'knitr'`, then in the console, run `install.packages('knitr')` and try again.
+- Include your **exam number as the author** in the document preamble. 
+- Before you submit, delete the "Set-up instructions" and "Table and figure examples" sections. **Your submission should contain only your own work.**
+
+
+Instructions for completing the assessment itself are given in `sqmb-s2/README.md`.
+
+
+# Table and figure examples
+
+## How to present a data frame as a table with a caption
+
+The first step is to create a data frame that contains only the information you want to display in the table.
+(Some helpful functions for modifying a data frame include tidyverse's `filter()` and `select()`.)
+
+I'll illustrate this using R's built-in data frame `iris`.
+This data frame contains information about the shape and size of 150 different iris flowers, 50 each from three different species.
+Here, I'll create a table displaying only the first six rows of this data frame.
+
+```{r setup-data-example}
+# Create the data frame that you'll display (I'm using head() to get the first six rows of iris).
+brief_iris <- head(iris)
+```
+
+Once your data frame is ready, it can be displayed using the function `kable()` from the library `knitr`.
+`kable()` takes in a data frame and converts it into a markdown table.
+Then, when the document is knit to PDF, this markdown table is rendered into a professional-looking table.
+
+`kable()` also has an argument `caption`.
+Use this argument to give the table a caption that describes for the reader what the table is showing.
+
+```{r table-example}
+# Use kable() to create the markdown table, and use the `caption` argument to add a caption to the table.
+kable(
+  brief_iris,
+  caption = 'Sepal and petal measurements in centimetres for six setosa irises.'
+)
+```
+
+
+## How to present a ggplot as a figure with a caption
+
+For illustration, I'll create a scatter plot that shows the association between the irises' petal width and petal length, with points coloured by species.
+
+Including a caption for a figure works a little differently than for a table: you have to include the text caption in the header of the code chunk.
+You can do this using the chunk option `fig.cap`.
+Have a look at the example in the code.
+
+```{r figure-example, fig.cap = 'Petal length in irises is positively associated with petal width. Setosas have the smallest petals, while those of versicolors and virginicas are larger.'}
+
+# Create the plot that will be shown along with the caption in the chunk's `fig.cap` option.
+iris %>% 
+  ggplot(aes(x = Petal.Length, y = Petal.Width, colour = Species)) +
+  labs(x = 'Petal length (cm)',
+       y = 'Petal width (cm)') +
+  geom_point()
+```
+
+More information about including tables and figures in your Rmarkdown document can be found here: <https://rmd4sci.njtierney.com/figures-tables-captions-.html>.
+
+(Don't worry if the tables or figures appear in a different place in the PDF than they do in the Rmd file.
+Tables and figures might "float" around a little, based on what the typesetting algorithm thinks looks best, and this is to be expected.)
